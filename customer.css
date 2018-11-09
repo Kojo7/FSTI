@@ -1,0 +1,305 @@
+* {
+    box-sizing:border-box;
+}
+
+body {
+    background-image: url("sie_background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 2em;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+label {
+    display:inline-block;
+    margin-bottom:10px;
+}
+
+input {
+    padding:5px;
+    width: 70%;
+    margin-bottom: 10px;
+}
+
+button {
+    margin: 1em 0;
+    padding: 1em;
+    display:inline-block;
+    float: right;
+    color: black;
+    font-weight: bold;
+    border-radius: 12px;
+    background-color: rgba(191, 191, 191,0.7);
+}
+
+header {
+    background-color: transparent;
+    padding: 10px;
+    text-align: left;
+    font-size: 65px;
+    color: rgb(0, 153, 153);
+    width: 30%;
+}
+
+.logo {
+    background: url("siemens.jpg") no-repeat;
+    width: 200px;
+    height: 100px;
+    display: block;
+    text-indent: -9999px;
+}
+
+div {
+    float: left;
+    padding: 20px;
+    width: 100%;
+    background-color: #f1f1f1;
+}
+
+/* Clear floats after the columns */
+section:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Style the footer */
+footer {
+    background-color: #777;
+    padding: 10px;
+    text-align: center;
+    color: white;
+}
+
+/* Responsive layout - makes the two columns/boxes stack on top of each other instead of next to each other, on small screens */
+@media (max-width: 600px) {
+    nav, article {
+        width: 100%;
+        height: auto;
+    }
+}
+
+
+/* Style the tab */
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+/* Make sections (grey zones) */
+.section {
+    width: 31%;
+    height: 70%;
+    padding: 20px;
+    margin: 8px;
+    color: black;
+    background-color: lightgray;
+}
+/* Change background color of section on hover */
+.section:hover {
+    background-color: rgba(191, 191, 191,0.7);
+}
+
+.inside {
+    background-color: transparent;
+    float: left;
+    padding: 10px;
+}
+
+.output{
+    width: 80%;
+    margin-bottom: 10px;
+    background-color: transparent;
+}
+
+#customerPage {
+    background-color: transparent;
+    padding: 10px;
+    text-align: left;
+    font-size: 25px;
+    color: white;
+}
+
+#demandsname {
+    width: 80%;
+}
+
+#demandsdescription {
+    width: 80%;
+}
+
+#account {
+    height: 30px;
+    width: 70%;
+}
+
+#link {
+    color: white;
+}
+
+#feedback1 {
+    color: white;
+}
+
+#animation {
+    font-size: 25px;
+    -webkit-animation: blink-1 8s cubic-bezier(0.445, 0.050, 0.550, 0.950) infinite both;
+    animation: blink-1 8s cubic-bezier(0.445, 0.050, 0.550, 0.950) infinite both;
+}
+
+@-webkit-keyframes blink-1 {
+    0%,
+    50%,
+    100% {
+        opacity: 1;
+    }
+    25%,
+    75% {
+        opacity: 0;
+    }
+}
+@keyframes blink-1 {
+    0%,
+    50%,
+    100% {
+        opacity: 1;
+    }
+    25%,
+    75% {
+        opacity: 0;
+    }
+}
+
+/*commented sie over here */
+
+@-webkit-keyframes rotate-vert-center {
+    0% {
+        -webkit-transform: rotateY(0);
+        transform: rotateY(0);
+    }
+    100% {
+        -webkit-transform: rotateY(360deg);
+        transform: rotateY(360deg);
+    }
+}
+@keyframes rotate-vert-center {
+    0% {
+        -webkit-transform: rotateY(0);
+        transform: rotateY(0);
+    }
+    100% {
+        -webkit-transform: rotateY(360deg);
+        transform: rotateY(360deg);
+    }
+}
+
+#id02 {
+    width: 30%; /* Full width */
+    height: 33%; /* Full height */
+    left: 34%;
+    top: 35%;
+}
+
+#Message {
+    background-color: rgba(0, 102, 102,1);
+    color: white;
+    margin: 0;
+    width: 100%;
+    font-size: 20px;
+    text-align: center;
+}
+
+
+/* Form style */
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    right: 0;
+    top: 0;
+    width: 40%; /* Full width */
+    height: 93%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.8); /* Black w/ opacity */
+    padding-top: 60px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 3px auto; /* 15% from the top and centered */
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* Center the avatar image inside this container */
+.imgcontainer {
+    text-align: center;
+    margin: 6px 0 6px 0;
+}
+
+.selector {
+    margin-bottom: 10px;
+}
+
+
+/* Avatar image */
+img.avatar {
+    width: 40%;
+    border-radius: 50%;
+}
+
+/* The Close Button */
+.close {
+    /* Position it in the top right corner outside of the modal */
+    position: absolute;
+    right: 25px;
+    top: 0;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+/* Close button on hover */
+.close:hover,
+.close:focus {
+    color: red;
+    cursor: pointer;
+}
+
+/* Add Zoom Animation */
+.animate {
+    -webkit-animation: animatezoom 0.6s;
+    animation: animatezoom 0.6s
+}
+
+.logoutbtn {
+    float: right;
+    color: blue;
+    text-decoration: underline;
+}
+
+.loginbtn {
+    margin-top: 60px;
+    width: 30%;
+}
+
+@-webkit-keyframes animatezoom {
+    from {-webkit-transform: scale(0)}
+    to {-webkit-transform: scale(1)}
+}
+
+@keyframes animatezoom {
+    from {transform: scale(0)}
+    to {transform: scale(1)}
+}
+
+/* The "Forgot password" text */
+span.psw {
+    float: left;
+    padding-top: 35px;
+}
+/* End form style*/

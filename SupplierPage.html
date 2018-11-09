@@ -1,0 +1,149 @@
+<!doctype>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="supplier.css">
+    <script type="text/javascript" src="./node_modules/web3/dist/web3.min.js"></script>
+    <script type="text/javascript" src="./node_modules/bignumber.js/bignumber.min.js"></script>
+    <script type="text/javascript" src="node_modules/truffle-contract/dist/truffle-contract.min.js"></script>
+    <script type="text/javascript">
+
+
+        //The address of the SimpleStorage contract. **Change according to the contract address you deployed**
+        var contractAddress = "0x5fafea558866c4c74efc788d280a2564591ec455"
+        //Reads a text file. Used to read the contract specification JSON file
+        function readTextFile(file, callback) {
+            var rawFile = new XMLHttpRequest();
+            rawFile.overrideMimeType("application/json");
+            rawFile.open("GET", file, true);
+            rawFile.onreadystatechange = function() {
+                if (rawFile.readyState === 4 && rawFile.status == "200") {
+                    callback(rawFile.responseText);
+                }
+            };
+            rawFile.send(null)
+        }
+
+
+
+
+        /* Get all unprocessed requests */
+        function getRequests() {
+            contractobject.at(contractAddress).then(function(instance) {
+                instance.getRequests.call({from: "0x43439Cca7E74523262b2C757c874aa09969C1c9e", gas: 5000000}).then(function(result) {
+                    console.log(result);
+                    document.getElementById('requests').innerText = result;
+                    requests = result;
+                })
+            });
+            clearUnprocessed();
+        }
+
+        /* Clear unprocessed requests */
+        function clearUnprocessed() {
+            contractobject.at(contractAddress).then(function (instance) {
+                instance.clearRequests({from: "0x43439Cca7E74523262b2C757c874aa09969C1c9e", gas: 5000000}).then(function (result) {
+                    console.log(result)});
+            })
+        }
+
+        //Get specific demand
+        function getSpecificRequest() {
+            var request = document.getElementById('request').value;
+            contractobject.at(contractAddress).then(function(instance) {
+                instance.getSpecificRequest.call(request, {from: "0x43439Cca7E74523262b2C757c874aa09969C1c9e", gas: 5000000}).then(function(result) {
+                    console.log(result);
+                    document.getElementById('specificRequest').innerText = 'Material: ' + result + '.';
+                });
+            });
+        }
+
+
+        function sendSupply() {
+            var supplyID = document.getElementById('supplyID').value;
+            var supplyAddr = document.getElementById('supplyAddress').value;
+            var temp = document.getElementById('temperature').value;
+            contractobject.at(contractAddress).then(function(instance) {
+                instance.sendSupply(supplyID,temp,supplyAddr,{from: "0x43439Cca7E74523262b2C757c874aa09969C1c9e", gas: 5000000}).then(function(result) {
+                    console.log(result);
+                    document.getElementById('Message').innerText = 'Supply sent!';
+                }).catch(function (e) {
+                    console.log(e);
+                    document.getElementById('Message').innerText = 'You don\'t have enough money !';
+                })
+            });
+        }
+
+
+        function getBalance() {
+            contractobject.at(contractAddress).then(function(instance) {
+                instance.getBalance.call({from: "0x43439Cca7E74523262b2C757c874aa09969C1c9e", gas: 5000000}).then(function(result) {
+                    console.log(result);
+                    document.getElementById('balance').innerText = 'Your balance: ' + result;
+                })
+            });
+        }
+
+
+
+        //Create a new Web3 object to interact with the blockchain
+        var web3 = new Web3()
+        //Set endpoint at localhost:8545 (Ganache)
+        var provider = new Web3.providers.HttpProvider("http://localhost:7545")
+        web3.setProvider(provider)
+        var contract_spec
+        var contractobject
+
+        //This load the contract specifications (from the Truffle compiled contract in /build/contracts/SimpleStorage.json)
+        readTextFile("./build/contracts/Supplier.json", function(text) {
+            contract_spec = JSON.parse(text);
+            contractobject = TruffleContract(contract_spec);
+            contractobject.setProvider(provider);
+            getBalance();
+        });
+    </script>
+</head>
+
+<body>
+<header class="output" id="balance"></header>
+<header id="sie">Supplier</header>
+<header id="supplierPage">Supplier Page</header>
+
+
+<div class="section">
+    <label><b>New requests:</b></label>
+    <div class="output" id="requests"></div>
+    <button type="button" onClick="getRequests();">Get New Requests</button>
+</div>
+<div class="section" id="specificRequestSection">
+    <label><b>Enter your request:</b></label>
+    <input type="text" id="request" placeholder="Request ID">
+    <br>
+    <button type="button" onClick="getSpecificRequest();">Get Request</button>
+    <div class="inside" id="specificRequest"></div>
+</div>
+<div class="section" id="sendSupply">
+    <label><b>Send supply</b></label>
+    <input type="text" id="supplyID" placeholder="Supply ID">
+    <input type="text" id="temperature" placeholder="Properties">
+    <input type="text" id="supplyAddress" placeholder="Address">
+    <br>
+    <button type="button" onClick="sendSupply();getBalance();document.getElementById('id02').style.display='block'">Send Supply</button>
+
+    <div class="output" id="temp"></div>
+</div>
+
+<!-- Modal for messages -->
+<div id="id02" class="modal">
+    <span onclick="document.getElementById('id02').style.display='none'"
+          class="close" title="Close Modal">&times;</span>
+    <div class="modal-content animate" id="Message">Message Here</div>
+    <button type="button" onclick="document.getElementById('id02').style.display='none'" class="okButton">OK</button>
+</div>
+
+
+
+
+</body>
+
+</html>
