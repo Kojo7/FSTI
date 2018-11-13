@@ -1,0 +1,302 @@
+<!doctype>
+<html>
+
+
+
+<head>
+
+    <link rel="stylesheet" type="text/css" href="company.css">
+    <script type="text/javascript" src="./node_modules/web3/dist/web3.min.js"></script>
+    <script type="text/javascript" src="./node_modules/bignumber.js/bignumber.min.js"></script>
+    <script type="text/javascript" src="node_modules/truffle-contract/dist/truffle-contract.min.js"></script>
+    <script type="text/javascript">
+
+        //The address of the SimpleStorage contract. **Change according to the contract address you deployed**
+        var contractAddress = "0x3f8b91f6fa63fb952db85a998a9becc0e5e42ac6"
+        //Reads a text file. Used to read the contract specification JSON file
+        function readTextFile(file, callback) {
+            var rawFile = new XMLHttpRequest();
+            rawFile.overrideMimeType("application/json");
+            rawFile.open("GET", file, true);
+            rawFile.onreadystatechange = function() {
+                if (rawFile.readyState === 4 && rawFile.status == "200") {
+                    callback(rawFile.responseText);
+                }
+            };
+            rawFile.send(null)
+        }
+
+        //Get unprocessed demands
+        function getDemands() {
+            contractobject.at(contractAddress).then(function(instance) {
+                instance.getDemands.call({from: "0x58a5727f2E956D3017C61135b7a9Ff56b5B22b76", gas: 5000000}).then(function(result) {
+                    console.log(result);
+                    document.getElementById('demands').innerText = result;
+                })
+            });
+            clearUnprocessed();
+        }
+
+        //Clear unprocessed demands
+        function clearUnprocessed() {
+            contractobject.at(contractAddress).then(function (instance) {
+                instance.clearDemands({from: "0x58a5727f2E956D3017C61135b7a9Ff56b5B22b76", gas: 5000000}).then(function (result) {
+                    console.log(result)});
+            })
+        }
+
+        //Get specific demand
+        function getSpecificDemand() {
+            var demand = document.getElementById('demand').value;
+            contractobject.at(contractAddress).then(function(instance) {
+                instance.getSpecificDemand.call(demand, {from: "0x58a5727f2E956D3017C61135b7a9Ff56b5B22b76", gas: 5000000}).then(function(result) {
+                    console.log(result);
+                    document.getElementById('specificDemand').innerText = 'Name: ' + result[0] + '.\n Description: ' + result[1] + '.\n Customer address: ' + result[2] + '.';
+                })
+            });
+        }
+
+        /*Store model */
+        function storeModel() {
+            var modelID = document.getElementById('demandID').value;
+            var author = document.getElementById('author').value;
+            var path = document.getElementById('path').value;
+            var material = document.getElementById('material').value;
+            var requirement1 = document.getElementById('requirement1').value;
+            var requirement2 = document.getElementById('requirement2').value;
+            contractobject.at(contractAddress).then(function(instance) {
+                instance.storeModel(modelID,author,path,material,requirement1,requirement2, {from: "0x58a5727f2E956D3017C61135b7a9Ff56b5B22b76", gas: 5000000}).then(function(result) {
+                    console.log(result);
+                    document.getElementById('Message').innerText = 'Model stored';
+                })
+            });
+        }
+
+        /* Get specific demand */
+        function getModel() {
+            var modelID = document.getElementById('modelID').value;
+            contractobject.at(contractAddress).then(function(instance) {
+                instance.getModel.call(modelID, {from: "0x58a5727f2E956D3017C61135b7a9Ff56b5B22b76", gas: 5000000}).then(function(result) {
+                    console.log(result);
+                    document.getElementById('specificModel').innerText = 'Name: ' + result[0] + '.\n Author: ' + result[1] + '.\n Path: ' + result[2] + '.\n Date: ' + result[3] + '.';
+                })
+            });
+        }
+
+        /* Get supply */
+        function getSupply() {
+            var supplyID = document.getElementById('supplyID').value;
+            contractobject.at(contractAddress).then(function(instance) {
+                instance.getSupply.call(supplyID, {from: "0x58a5727f2E956D3017C61135b7a9Ff56b5B22b76", gas: 5000000}).then(function(result) {
+                    console.log(result);
+                    document.getElementById('specificSupply').innerText = 'Supply address: ' + result + '.';
+                })
+            });
+        }
+
+        /*Store prototype */
+        function storePrototype() {
+            var protID = document.getElementById('prototypeID').value;
+            var prototypePath = document.getElementById('prototypePath').value;
+            contractobject.at(contractAddress).then(function(instance) {
+                instance.storePrototype(protID,prototypePath, {from: "0x58a5727f2E956D3017C61135b7a9Ff56b5B22b76", gas: 5000000}).then(function(result) {
+                    console.log(result);
+                    document.getElementById('Message').innerText = 'Prototype stored';
+                })
+            });
+        }
+
+        /* Get supply */
+        function getPrototype() {
+            var protID = document.getElementById('protID').value;
+            contractobject.at(contractAddress).then(function(instance) {
+                instance.getPrototype.call(protID, {from: "0x58a5727f2E956D3017C61135b7a9Ff56b5B22b76", gas: 5000000}).then(function(result) {
+                    console.log(result);
+                    document.getElementById('specificPrototype').innerText = 'Name: ' + result[0] + '. \n Customer address: ' + result[1] + '. \n Prototype address: ' + result[2] + '. \n Date: ' + result[3] + '.';
+                })
+            });
+        }
+
+        /*Release prototype */
+        function releasePrototype() {
+            var protoID = document.getElementById('prototID').value;
+            var req1 = document.getElementById('req1').value;
+            var req2 = document.getElementById('req2').value;
+            var protLink = document.getElementById('protLink').value;
+            contractobject.at(contractAddress).then(function (instance) {
+                instance.releasePrototype(protoID, protLink, req1, req2, {from: "0x58a5727f2E956D3017C61135b7a9Ff56b5B22b76", gas: 5000000
+                }).then(function (result) {
+                    console.log(result);
+                    document.getElementById('Message').innerText = 'Prototype released!';
+                }).catch(function (e) {
+                    console.log(e);
+                    document.getElementById('Message').innerText = 'The requirements are not fulfilled!';
+                })
+            });
+        }
+
+
+        //Create a new Web3 object to interact with the blockchain
+        var web3 = new Web3()
+        //Set endpoint at localhost:8545 (Ganache)
+        var provider = new Web3.providers.HttpProvider("http://localhost:7545")
+        web3.setProvider(provider)
+        var contract_spec
+        var contractobject
+        //This load the contract specifications (from the Truffle compiled contract in /build/contracts/SimpleStorage.json)
+        readTextFile("./build/contracts/Company.json", function(text) {
+            contract_spec = JSON.parse(text)
+            contractobject = TruffleContract(contract_spec)
+            contractobject.setProvider(provider)
+            document.getElementById("defaultOpen").click();
+        });
+
+        ////THIS IS FOR TABS////
+        function openTab(evt, tab) {
+            // Declare all variables
+            var i, tabcontent, tablinks;
+
+            // Get all elements with class="tabcontent" and hide them
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Get all elements with class="tablinks" and remove the class "active"
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            // Show the current tab, and add an "active" class to the button that opened the tab
+            document.getElementById(tab).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+        ////THIS IS FOR TABS////
+
+    </script>
+</head>
+
+
+<body>
+<!-- <header id="sie"><img src="siemens.jpg" alt="Logo" class="logo"></header> -->
+<a class="logo" href="">Logo</a>
+<header>Company Page</header>
+
+<!-- Tab links -->
+<div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'DemandsSection')" id="defaultOpen">Demands</button>
+    <button class="tablinks" onclick="openTab(event, 'ModelsSection')">Models</button>
+    <button class="tablinks" onclick="openTab(event, 'PrototypesSection')">Prototypes</button>
+</div>
+
+<!-- Tab content -->
+<div id="DemandsSection" class="tabcontent">
+    <div class="section">
+        <label><b>New demands:</b></label>
+        <div class="output" id="demands"></div>
+        <button type="button" onClick="getDemands();">Get New Demands</button>
+    </div>
+    <div class="section" id="specificDemandSection">
+        <label><b>Enter your demand:</b></label>
+        <input type="text" id="demand" placeholder="Demand ID">
+        <br>
+        <button type="button" onClick="getSpecificDemand();">Get Demand</button>
+        <div class="inside" id="specificDemand"></div>
+    </div>
+</div>
+
+<div id="ModelsSection" class="tabcontent">
+    <!-- store model section -->
+    <div class="section">
+        <label><b>Store model</b></label>
+        <div class="inside">
+            <input type="text" id="demandID" placeholder="Demand ID">
+            <input type="text" id="author" placeholder="Author">
+            <input type="text" id="path" placeholder="Path">
+            <select id="material" class="material" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <option selected disabled>Choose material</option>
+                <option value="steel">Steel</option>
+                <option value="wood">Wood</option>
+                <option value="plastic">Plastic</option>
+            </select>
+            <label><b>Choose requirements:</b></label>
+            <select id="requirement1" class="requirement1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <option selected disabled>Choose value</option>
+                <option value="50">50 kg</option>
+                <option value="100">100 kg</option>
+                <option value="150">150 kg</option>
+                <option value="200">200 kg</option>
+                <option value="250">250 kg</option>
+                <option value="300">300 kg</option>
+            </select>
+            <select id="requirement2" class="requirement2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <option selected disabled>Choose value</option>
+                <option value="0.5">0.5 s</option>
+                <option value="1">1 s</option>
+                <option value="3">3 s</option>
+                <option value="5">5 s</option>
+                <option value="7">7 s</option>
+                <option value="10">10 s</option>
+            </select>
+            <br>
+            <button type="button" onClick="storeModel();document.getElementById('id02').style.display='block'">Store Model</button>
+        </div>
+    </div>
+
+    <!-- get model section -->
+    <div class="section">
+        <label><b>Get model</b></label>
+        <input type="text" id="modelID" placeholder="Model ID">
+        <br>
+        <button type="button" onClick="getModel();">Get Model</button>
+        <div class="inside" id="specificModel"></div>
+    </div>
+
+    <!-- store model section -->
+    <div class="section">
+        <label><b>Get supply</b></label>
+        <input type="text" id="supplyID" placeholder="Model ID">
+        <br>
+        <button type="button" onClick="getSupply();">Get Supply</button>
+        <div class="inside" id="specificSupply"></div>
+    </div>
+</div>
+
+<div id="PrototypesSection" class="tabcontent">
+    <div class="section">
+        <label><b>Store prototype</b></label>
+        <input type="text" id="prototypeID" placeholder="Prototype ID">
+        <input type="text" id="prototypePath" placeholder="Address">
+        <br>
+        <button type="button" onClick="storePrototype();document.getElementById('id02').style.display='block';">Store Prototype</button>
+    </div>
+    <div class="section">
+        <label><b>Get prototype</b></label>
+        <input type="text" id="protID" placeholder="Prototype ID">
+        <br>
+        <button type="button" onClick="getPrototype();">Get Prototype</button>
+        <div class="inside" id="specificPrototype"></div>
+    </div>
+    <div class="section">
+        <label><b>Release prototype</b></label>
+        <input type="text" id="prototID" placeholder="Prototype ID">
+        <input type="text" id="protLink" placeholder="Prototype link">
+        <input type="text" id="req1" placeholder="Requirement 1">
+        <input type="text" id="req2" placeholder="Requirement 2">
+        <br>
+        <button type="button" onClick="releasePrototype();document.getElementById('id02').style.display='block';">Release Prototype</button>
+    </div>
+</div>
+
+<!-- Modal for messages -->
+<div id="id02" class="modal">
+    <span onclick="document.getElementById('id02').style.display='none'"
+          class="close" title="Close Modal">&times;</span>
+    <div class="modal-content animate" id="Message">Message Here</div>
+    <button type="button" onclick="document.getElementById('id02').style.display='none'" class="okButton">OK</button>
+</div>
+
+</body>
+
+</html>

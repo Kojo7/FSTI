@@ -1,0 +1,15 @@
+---------------------
+###customer page###
+---------------------
+
+#sie {
+-webkit-animation: rotate-vert-center 5s cubic-bezier(0.455, 0.030, 0.515, 0.955) 2s infinite both;
+animation: rotate-vert-center 5s cubic-bezier(0.455, 0.030, 0.515, 0.955) 2s infinite both;
+}
+
+#siemens air-craft image address
+https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNDkZVwNq9yJ1waHdASY6RBILP1Ko8lzlHQ6f2d1jnCUhs0jUD
+
+<span>0xa1270Df7fC2DEf14386848F9C1B02EfF89fefE75</span>
+
+bar hungry supply ramp hire keen catalog comfort slot country survey logic - metamask
