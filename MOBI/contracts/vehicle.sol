@@ -2,55 +2,78 @@ pragma solidity ^0.4.2;
 
 /**
  * The VehicleOwner contract ...
+     // Model of the vehicle : model, numberplate, id 
+    // Store vehicle
+    // Store number of vehicles registered. (for stakeholders)
  */
 contract VehicleOwner {
 	address public owner;
-	mapping (bytes32 => address) public vehicles; 
 	uint[] timesstamp; 
-
-	event NewVehicleAdded(address indexed newVehicle, uint256 timesstamp);
 	
 	function VehicleOwner () public{
 		owner = msg.sender;
 		
 	}	
 
+    //only VehicleOwner can alter this contract.
     modifier onlyOwner() { 
         require (msg.sender == owner); 
         _; 
     }
 
-    // Model of the vehicle : model, numberplate, id 
-    // Store vehicle
-    // Store number of vehicles registered. (for stakeholders)
     struct Vehicle {
-        address addr;
-        string model;
-        string make;
-        bytes32 vin;
+        string vehicle_owner;   // name of the owner of the vehicle
+        address owner_addr;     // address of the owner of the vehicle
+        string model;           // model of the vehicle e.g c class
+        string make;            // type of vehicle e.g Mercedes
+        bytes32 vin;            // unique verification identification number
+        bool initialized;       // process control variable. Check whether the vehicle already exists.
     }
 	
-    /**
-    * @dev Throws if called by any account other than the owner.
-    */
-    // model:(e.g c class), make:(e.g Mercedes Benz),vin:(e.g 235698 this will be the id of every car.) 
-    function createNewVehicle (string model, string make, bytes32 vin) public onlyOwner returns (bool success) {
-    	address newVehicle = new Vehicle(model, make, vin);
-    	vehicles[vin] = newVehicle;
-    	NewVehicleAdded(newVehicle, now);
-        return true;
+    //Store Vehicles with their respective unique vin's. 
+    mapping (bytes32 => Vehicle) private vehicles;
+    
+    //Is used later on to store vehicles under their respective vins's
+    vehicles[vin] = Vehicle(addr,model,make,true);
+
+    //For the wallet Store
+    mapping (address => mapping(bytes32 => bool)) private vehicleWallet;
+    
+    //assigning vehicle to wallet
+    vehicleWallet[msg.sender][vin] = true;
+
+    //Events to trigger when a transaction has taken place.e.g CreatedNewVehicle, etc
+    event NewVehicleAdded(address account, bytes32 vin, uint256 timesstamp);
+    event RejectVehicle(address account, uint vin, string message);
+
+
+    // Creates a new vehicle.
+    function createNewVehicle (string model, string make, bytes32 vin) {
+        if(!vehicles[vin].initialized) { // checks whether a vehicle with it's vin already exists
+            RejectVehicle(msg.sender, vin, "Vehicle with ths identification number already exists"); // If it exists, reject the entry and throw a message.
+            return; // throw back the entry
+        }
+
+        vehicles[vin] = Vehicle(addr, model, make, true); // Vehicle'S vin is the unique id to store the vehicles
+        vehicleWallet[msg.sender][vin] = true; // Links the vehicle to its wallet by id [vin]
+        NewVehicleAdded(msg.sender, )
     }
 
     // gets all details of registered vehicles
-    function getVehicle () constant returns (address) {
-        return newVehicle;
+    function getVehicle () constant returns (string) {
+        return (vehicles.addr);
     }   
 }
 
 /**
  * The MyToken contract sends tokens from the service provider to the vehicle wallet
- */
+ 
 contract MyToken is VehicleOwner{
+    //What is neede and can be changed
+    //Constructor
+    //Set total no. of tokens for service provider
+
+    //Details of the tokens
     string public name = "Steinbeis token"; //Name of token
     string public symbol = "STB"; // symbol of token
     uint8 public decimals = 18; // same value as wei
@@ -71,3 +94,4 @@ contract MyToken is VehicleOwner{
     
     
 }
+*/
