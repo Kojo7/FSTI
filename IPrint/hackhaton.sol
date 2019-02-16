@@ -17,23 +17,28 @@ contract owner is Ownable {
     mapping (string => address) hashowner; // Mapping hash value to owners;
     //mapping (address => HashOwner) owners; // List of all owners and hash values;
     
+    //Events
+    event NewHashCreated(address Address, string Hash);
+    
+    
     //set hash value and address of owner of HashValue
     function setHashValue(string _Hash, address _Address) external {
         Hash = _Hash;
         Address = _Address;
         printOwners[_Address] = _Hash;
         hashowner[_Hash] = _Address;
-        
+        emit NewHashCreated(_Address,_Hash);
     }
     
-    //get the hash value by address
+    //get hash value base on address.
     function getHashValue(address _Address) view external returns(string) {
        return Hash;
     }
     
-    //get the address by hash value
+    //get address base on hash value.
     function getAddress(string _Hash) view external returns(address) {
         return Address;
     }
+    
     
 }
